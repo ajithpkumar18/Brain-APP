@@ -5,20 +5,20 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true }
 })
 
-const UserModel = mongoose.model("User", UserSchema)
+export const UserModel = mongoose.model("User", UserSchema)
 
 const TagsSchema = new mongoose.Schema({
     title: { type: String, required: true }
 })
 
-const TagsModel = mongoose.model("Tags", TagsSchema)
+export const TagsModel = mongoose.model("Tags", TagsSchema)
 
 const LinkSchema = new mongoose.Schema({
     hash: { type: String, required: true },
     userId: { type: Types.ObjectId, required: true, ref: UserModel }
 })
 
-const LinkModel = mongoose.model("Link", LinkSchema)
+export const LinkModel = mongoose.model("Link", LinkSchema)
 
 
 const contentTypes = ['image', 'video', 'article', 'audio'];
@@ -30,11 +30,4 @@ const ContentShema = new mongoose.Schema({
     userId: { type: Types.ObjectId, ref: UserModel, required: true }
 })
 
-const ContentModel = mongoose.model("content", ContentShema)
-
-module.exports = {
-    UserModel,
-    TagsModel,
-    LinkModel,
-    ContentModel
-}
+export const ContentModel = mongoose.model("content", ContentShema)
