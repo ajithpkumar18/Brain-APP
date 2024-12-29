@@ -33,33 +33,28 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContentModel = exports.LinkModel = exports.TagsModel = exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const UserSchema = new mongoose_1.default.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true }
 });
-const UserModel = mongoose_1.default.model("User", UserSchema);
+exports.UserModel = mongoose_1.default.model("User", UserSchema);
 const TagsSchema = new mongoose_1.default.Schema({
     title: { type: String, required: true }
 });
-const TagsModel = mongoose_1.default.model("Tags", TagsSchema);
+exports.TagsModel = mongoose_1.default.model("Tags", TagsSchema);
 const LinkSchema = new mongoose_1.default.Schema({
     hash: { type: String, required: true },
-    userId: { type: mongoose_1.Types.ObjectId, required: true, ref: UserModel }
+    userId: { type: mongoose_1.Types.ObjectId, required: true, ref: exports.UserModel }
 });
-const LinkModel = mongoose_1.default.model("Link", LinkSchema);
+exports.LinkModel = mongoose_1.default.model("Link", LinkSchema);
 const contentTypes = ['image', 'video', 'article', 'audio'];
 const ContentShema = new mongoose_1.default.Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },
     title: { type: String, required: true },
-    tags: [{ type: mongoose_1.Types.ObjectId, ref: TagsModel, required: true }],
-    userId: { type: mongoose_1.Types.ObjectId, ref: UserModel, required: true }
+    tags: [{ type: mongoose_1.Types.ObjectId, ref: exports.TagsModel, required: true }],
+    userId: { type: mongoose_1.Types.ObjectId, ref: exports.UserModel, required: true }
 });
-const ContentModel = mongoose_1.default.model("content", ContentShema);
-module.exports = {
-    UserModel,
-    TagsModel,
-    LinkModel,
-    ContentModel
-};
+exports.ContentModel = mongoose_1.default.model("content", ContentShema);
