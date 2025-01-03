@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 import mongoose, { mongo, Types } from "mongoose";
 import bcrypt from "bcrypt"
 import cookieParser from "cookie-parser"
-import { ContentModel, UserModel } from "./schema/models";
+import { ContentModel, LinkModel, UserModel } from "./schema/models";
 import { userMiddleware } from "./middlewares/userMiddleware";
+import { random } from "./utils";
 
 
 const app = express();
@@ -158,10 +159,66 @@ app.delete("/api/v1/user/content", userMiddleware, async (req, res) => {
         res.status(404).json("Faced some error")
     }
 })
-app.get("/api/v1/brain/share/", () => {
-    console.log("")
+
+app.get("/api/v1/brain/share", userMiddleware, async (req, res) => {
+    const share = req.body.share;
+    if (share) {
+        // @ts-ignore
+        let existingLink = await LinkModel.findOne({ userId: req.userId })
+
+        if (existingLink) {
+            res.status(200).json({ "link": existingLink.hash })
+            return
+        }
+
+        const hash = random(10)
+        await LinkModel.create({
+            // @ts-ignore
+            userId: req.userId,
+            hash: hash
+        })
+
+        res.status(200).json({ "link": hash })
+
+    } else {
+        await LinkModel.deleteOne({
+            // @ts-ignore
+            userId: req.userId
+        })
+
+        res.sendStatus(200)
+    }
 })
-app.get("/api/v1/brain/:shareLink", () => { })
+app.get("/api/v1/brain/:shareLink", async (req, res) => {
+    const link = req.params.shareLink
+
+    try {
+        let userlink = await LinkModel.findOne({ hash: link })
+
+        if (!userlink) {
+            res.status(404).send("Sorry access not granted")
+            return
+        }
+        let contents = await ContentModel.find({ userId: userlink.userId })
+        let user = await UserModel.findOne({ _id: userlink.userId })
+
+        if (!user) {
+            res.status(404).send({
+                message: "User not found. ideally dhould not happen",
+            })
+
+            return;
+        }
+        res.status(200).json({
+            username: user.username,
+            content: contents
+        })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(400).send({ "error": e })
+    }
+})
 
 app.listen(3000, () => {
     main();
