@@ -14,8 +14,8 @@ const TagsSchema = new mongoose.Schema({
 export const TagsModel = mongoose.model("Tags", TagsSchema)
 
 const LinkSchema = new mongoose.Schema({
-    hash: { type: String, required: true },
-    userId: { type: Types.ObjectId, required: true, ref: UserModel }
+    hash: { type: String },
+    userId: { type: Types.ObjectId, required: true, ref: UserModel, unique: true }
 })
 
 export const LinkModel = mongoose.model("Link", LinkSchema)
