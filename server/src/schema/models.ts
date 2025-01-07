@@ -21,7 +21,7 @@ const LinkSchema = new mongoose.Schema({
 export const LinkModel = mongoose.model("Link", LinkSchema)
 
 
-const contentTypes = ['image', 'video', 'article', 'audio'];
+const contentTypes = ["twitter", "youtube"];
 const ContentShema = new mongoose.Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },

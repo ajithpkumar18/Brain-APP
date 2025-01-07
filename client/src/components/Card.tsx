@@ -1,6 +1,7 @@
 import { ShareIcon } from "./Icons/ShareIcon"
 
 interface CardProps {
+    title: string;
     link: string;
     type: "youtube" | "twitter"
 }
@@ -27,6 +28,7 @@ export const Card = (props: CardProps) => {
                     </div>
                 </div>
                 <div className="pt-5 flex flex-col gap-3">
+                    <h1>{props.title}</h1>
                     {props.type === "youtube" &&
                         <a href={props.link} target="_blank" className="cursor-pointer">
                             <iframe className="w-full rounded-md h-full" src={props.link.replace('/watch?v=', '/embed/')} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>

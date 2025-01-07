@@ -6,11 +6,12 @@ import cookieParser from "cookie-parser"
 import { ContentModel, LinkModel, UserModel } from "./schema/models";
 import { userMiddleware } from "./middlewares/userMiddleware";
 import { random } from "./utils";
-
+import cors from "cors"
 
 const app = express();
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors())
 
 const main = async () => {
 
@@ -22,14 +23,16 @@ const main = async () => {
 }
 
 app.post("/api/v1/user/signup", async (req, res) => {
-    let name = req.body.name;
+    console.log("signup");
+
+    let username = req.body.username;
     let password = req.body.password;
     password = await bcrypt.hash(password, 3)
 
     try {
         await UserModel.create({
-            username: name,
-            password: password
+            username,
+            password
         })
 
         res.status(200).json({ message: "success" })
@@ -39,19 +42,19 @@ app.post("/api/v1/user/signup", async (req, res) => {
     }
 })
 app.post("/api/v1/user/signin", async (req, res) => {
-    let name = req.body.name;
+    let username = req.body.username;
     let password = req.body.password;
 
     try {
         let User = await UserModel.findOne({
-            username: name
+            username
         })
 
         if (User) {
             let isUser = bcrypt.compareSync(password, User.password)
             if (isUser) {
                 let token = jwt.sign({ id: User._id }, "")
-                res.status(200).cookie("token", token).json({ message: "Success" });
+                res.status(200).cookie("token", token).json({ "token": token, message: "Success" });
             }
             else {
                 res.status(400).json({ message: "No user exists" });
@@ -72,10 +75,10 @@ app.get("/api/v1/user/content", userMiddleware, async (req, res) => {
     const userId = req.userId;
     try {
 
-        const contents = await ContentModel.find({
+        const content = await ContentModel.find({
             userId
         }).populate("userId", "username sirname")
-        res.send(contents)
+        res.status(200).json({ content })
     }
     catch (e) {
         console.log(e);
@@ -105,13 +108,7 @@ app.post("/api/v1/user/content", userMiddleware, async (req, res) => {
             title,
             userId,
         })
-
-        if (Content) {
-            res.status(200).json({ message: "Content added succesfully" })
-        }
-        else {
-            res.status(404).json({ message: "Unsucessfull " })
-        }
+        res.status(200).json({ message: "Content added succesfully" })
     }
     catch (e) {
         console.log(e);
@@ -160,7 +157,9 @@ app.delete("/api/v1/user/content", userMiddleware, async (req, res) => {
     }
 })
 
-app.get("/api/v1/brain/share", userMiddleware, async (req, res) => {
+app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
+    console.log("share");
+
     const share = req.body.share;
     if (share) {
         // @ts-ignore

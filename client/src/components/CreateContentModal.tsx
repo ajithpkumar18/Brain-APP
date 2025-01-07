@@ -7,7 +7,7 @@ import { BACKEND_URL } from "../config";
 
 interface ModalProps {
     open: boolean;
-    onClick: () => void;
+    onClose: () => void;
 }
 
 enum contents {
@@ -15,24 +15,30 @@ enum contents {
     Twitter = "twitter"
 }
 
-export const CreateContentModal = ({ open, onClick }: ModalProps) => {
+export const CreateContentModal = ({ open, onClose }: ModalProps) => {
     const titleRef = useRef<HTMLInputElement>()
     const linkRef = useRef<HTMLInputElement>()
     const [type, setType] = useState(contents.Youtube)
 
     const addContent = async () => {
         const title = titleRef.current?.value;
-        const link = titleRef.current?.value;
+        const link = linkRef.current?.value;
+        if (title !== "" && link !== "") {
 
-        await axios.post(`${BACKEND_URL}` + "/api/v1/user/content", {
-            title,
-            link,
-            type
-        }, {
-            headers: {
-                "authorization": localStorage.getItem("token")
-            }
-        })
+            await axios.post(`${BACKEND_URL}` + "/api/v1/user/content", {
+                title,
+                link,
+                type
+            }, {
+                headers: {
+                    "authorization": localStorage.getItem("token")
+                }
+            })
+            onClose();
+        }
+        else {
+            alert("Enter the correct input")
+        }
     }
 
     return <div>
@@ -45,7 +51,7 @@ export const CreateContentModal = ({ open, onClick }: ModalProps) => {
                     <div className=" flex flex-col justify-center">
                         <span className="bg-white opacity-100 p-4 rounded">
                             <div className="flex justify-end" >
-                                <div className="cursor-pointer" onClick={onClick}>
+                                <div className="cursor-pointer" onClick={onClose}>
                                     <CrossIcon />
                                 </div>
                             </div>
@@ -59,7 +65,7 @@ export const CreateContentModal = ({ open, onClick }: ModalProps) => {
                                 <Button text="Twitter" width="normal" variant={type === contents.Twitter ? "primary" : "secondary"} onClick={() => setType(contents.Twitter)} loading={false} />
                             </div>
                             <div className="flex justify-center">
-                                <Button variant={"primary"} text={"Submit"} width={"normal"} loading={false} />
+                                <Button variant={"primary"} text={"Submit"} width={"normal"} loading={false} onClick={addContent} />
                             </div>
                         </span>
                     </div>
