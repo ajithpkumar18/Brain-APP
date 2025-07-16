@@ -17,6 +17,9 @@ export default {
           500: "#9492db",
           600: "#7164c0"
         }
+      },
+      fontFamily: {
+        "lato": ['Lato', 'sans-serif']
       }
     },
   },

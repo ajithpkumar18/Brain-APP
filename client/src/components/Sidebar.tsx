@@ -14,10 +14,10 @@ export const Sidebar = () => {
             </p>
         </div>
         <div className=" h-screen border border-r-slate-200 pt-10">
-            <SidebarItem text="Home" icon={<HomeICon />} />
-            <SidebarItem text="Home" icon={<Links />} />
-            <SidebarItem text="Home" icon={<HomeICon />} />
-            <SidebarItem text="Home" icon={<HomeICon />} />
+            <SidebarItem text="Youtube" icon={<HomeICon />} />
+            <SidebarItem text="Twitter" icon={<Links />} />
+            {/* <SidebarItem text="Home" icon={<HomeICon />} />
+            <SidebarItem text="Home" icon={<HomeICon />} /> */}
         </div>
     </div>
     )

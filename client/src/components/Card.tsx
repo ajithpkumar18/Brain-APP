@@ -18,14 +18,14 @@ export const Card = (props: CardProps) => {
                         </div>
                         Project Ideas
                     </div>
-                    <div className="flex gap-2 items-center">
+                    {/* <div className="flex gap-2 items-center">
                         <div className="text-gray-500">
                             <ShareIcon size="size-5" />
                         </div>
                         <div className="text-gray-500">
                             <ShareIcon size="size-5" />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="pt-5 flex flex-col gap-3">
                     <h1>{props.title}</h1>
