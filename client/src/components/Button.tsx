@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 
 interface ButtonProps {
-	variant: "primary" | "secondary" | "white" | "temp";
+	variant: "primary" | "secondary" | "white" | "temp" | "tempLight";
 	text?: string;
 	startIcon?: ReactElement;
 	onClick?: () => void;
@@ -13,7 +13,8 @@ const variantClasses = {
 	primary: "bg-purple-600 text-white",
 	secondary: "bg-purple-200 text-purple-600 font-light justify-center",
 	white: "bg-white font-medium text-sky-600 font-light justify-center h-14",
-	temp: "bg-blue-600 text-white",
+	temp: "bg-blue-600 text-white border border-1 border-white",
+	tempLight: "bg-blue-200 text-blue-600",
 };
 
 const defaultStyles = `px-4 py-2 rounded-md flex items-center`;
