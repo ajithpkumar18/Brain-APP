@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
-import { CreateContentModal } from "../components/CreateContentModal";
+import { contents, CreateContentModal } from "../components/CreateContentModal";
 import { PlusIcon } from "../components/Icons/PlusIcon";
 import { ShareIcon } from "../components/Icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
@@ -12,10 +12,19 @@ import { BACKEND_URL } from "../config";
 function Dashboard() {
 	const [modal, setModal] = useState(false);
 	const { contents, refresh } = useContent();
-
+	const [filter, setFilter] = useState("all");
 	useEffect(() => {
 		refresh();
 	}, [modal]);
+
+	const dataToRender = useMemo(() => {
+		const filtered =
+			filter === "all"
+				? contents
+				: contents?.filter((content) => content.type == filter);
+
+		return filtered?.length > 0 ? filtered : contents;
+	}, [filter, contents]);
 
 	async function handleShare(val: boolean) {
 		let response = await axios.post(
@@ -36,7 +45,7 @@ function Dashboard() {
 	}
 	return (
 		<div className='flex'>
-			<Sidebar />
+			<Sidebar setFilter={setFilter} />
 			<div className='p-4 w-full min-h-screen  bg-gradient-to-b from-indigo-500 from-10% via-blue-500 via-30% to-blue-900 to-90%'>
 				<CreateContentModal
 					open={modal}
@@ -44,9 +53,6 @@ function Dashboard() {
 						setModal(false);
 					}}
 				/>
-				{/* <Button variant={"primary"} size={"sm"} text={"Heelo"} onClick={() => { }} startIcon={<PlusIcon />} />
-                    <Button variant={"primary"} size={"md"} text={"Heelo"} onClick={() => { }} startIcon={"+"} />
-                    <Button variant={"secondary"} size={"lg"} text={"Heelo"} onClick={() => { }} startIcon={"+"} /> */}
 				<div className='flex justify-end gap-4'>
 					<Button
 						loading={false}
@@ -76,12 +82,8 @@ function Dashboard() {
 					/>
 				</div>
 				<div className='flex gap-3 flex-wrap'>
-					{/* <Card type={"twitter"} link={"https://x.com/AJITHPKUMAR3/status/1872304992482435459"} title={"My tweet"} />
-
-                    <Card type={"youtube"} link={"https://www.youtube.com/watch?v=zL4cULLyBJY"} title={"Old video "} /> */}
-
-					{contents.map(({ type, link, title }) => (
-						<Card type={type} link={link} title={title} />
+					{dataToRender.map(({ type, link, title }, id) => (
+						<Card key={id} type={type} link={link} title={title} />
 					))}
 				</div>
 			</div>
