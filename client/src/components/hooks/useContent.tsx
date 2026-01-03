@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../../config";
 import { useNavigate } from "react-router-dom";
 
 export const useContent = () => {
+	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 	const navigate = useNavigate();
 	const [contents, setContents] = useState([]);
 	function refresh() {
