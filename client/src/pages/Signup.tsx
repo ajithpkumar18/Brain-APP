@@ -13,13 +13,10 @@ export const Signup = () => {
 		let username = usernameRef.current?.value;
 		let password = passwordRef.current?.value;
 
-		const response = await axios.post(
-			`${BACKEND_URL}` + "/api/v1/user/signup",
-			{
-				username,
-				password,
-			}
-		);
+		const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
+			username,
+			password,
+		});
 
 		if (response.status === 200) {
 			navigate("/signin");
