@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
-import { contents, CreateContentModal } from "../components/CreateContentModal";
+import { CreateContentModal } from "../components/CreateContentModal";
 import { PlusIcon } from "../components/Icons/PlusIcon";
 import { ShareIcon } from "../components/Icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
@@ -21,7 +21,9 @@ function Dashboard() {
 		const filtered =
 			filter === "all"
 				? contents
-				: contents?.filter((content) => content.type == filter);
+				: contents?.filter(
+						(content: { type: string }) => content.type == filter
+				  );
 
 		return filtered?.length > 0 ? filtered : contents;
 	}, [filter, contents]);
