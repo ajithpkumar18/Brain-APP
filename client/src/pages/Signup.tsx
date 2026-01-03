@@ -2,13 +2,13 @@ import { useRef } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
 import { Link, useNavigate } from "react-router-dom";
 
 export const Signup = () => {
 	const usernameRef = useRef<HTMLInputElement>();
 	const passwordRef = useRef<HTMLInputElement>();
 	const navigate = useNavigate();
+	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 	const signUP = async () => {
 		let username = usernameRef.current?.value;
 		let password = passwordRef.current?.value;
