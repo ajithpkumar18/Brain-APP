@@ -1,20 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../components/Button";
-import { Card } from "../components/Card";
-import { CreateContentModal } from "../components/CreateContentModal";
+import { contents, CreateContentModal } from "../components/CreateContentModal";
 import { PlusIcon } from "../components/Icons/PlusIcon";
 import { ShareIcon } from "../components/Icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
 import { useContent } from "../components/hooks/useContent";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import DataToRender from "../components/DataToRender";
 
 function Dashboard() {
 	const [modal, setModal] = useState(false);
-	const { contents, refresh } = useContent();
+	const { contents, refresh, loading, isLoading } = useContent();
 	const [filter, setFilter] = useState("all");
 	useEffect(() => {
 		refresh();
+		isLoading(false);
 	}, [modal]);
 
 	const dataToRender = useMemo(() => {
@@ -22,7 +23,7 @@ function Dashboard() {
 			filter === "all"
 				? contents
 				: contents?.filter(
-						(content: { type: string }) => content.type == filter
+						(content: { type: contents }) => content.type == filter
 				  );
 
 		return filtered?.length > 0 ? filtered : contents;
@@ -70,7 +71,7 @@ function Dashboard() {
 						onClick={() => handleShare(true)}
 						loading={false}
 						width='normal'
-						variant={"tempLight"}
+						variant={"dark"}
 						text={"Share Brain"}
 						startIcon={<ShareIcon size={"size-4"} />}
 					/>
@@ -78,16 +79,17 @@ function Dashboard() {
 						onClick={() => handleShare(false)}
 						loading={false}
 						width='normal'
-						variant={"tempLight"}
+						variant={"dark"}
 						text={"Stop Share"}
 						startIcon={<ShareIcon size={"size-4"} />}
 					/>
 				</div>
-				<div className='flex gap-3 flex-wrap'>
-					{dataToRender.map(({ type, link, title }, id) => (
-						<Card key={id} type={type} link={link} title={title} />
-					))}
-				</div>
+				{dataToRender && (
+					<DataToRender
+						dataToRender={dataToRender}
+						loading={loading}
+					/>
+				)}
 			</div>
 		</div>
 	);

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { isValidJWT } from "../../utils";
+import useJwt from "../../components/hooks/useJwt";
 
 export const Anonymous = () => {
-	const [jwt, setJwt] = useState(localStorage.getItem("token"));
+	const { jwt } = useJwt();
 
-	useEffect(() => {
-		setJwt(localStorage.getItem("token"));
-	}, [jwt]);
-
-	return jwt ? <Navigate to='/dashboard' replace /> : <Outlet />;
+	return isValidJWT(jwt as string) ? (
+		<Outlet />
+	) : (
+		<Navigate to='/dashboard' replace />
+	);
 };

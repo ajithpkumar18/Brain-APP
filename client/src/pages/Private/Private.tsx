@@ -1,13 +1,10 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
+import { isValidJWT } from "../../utils";
+import useJwt from "../../components/hooks/useJwt";
 
 export const Private = ({ children }: { children: ReactElement }) => {
-	const [jwt, setJwt] = useState(localStorage.getItem("token"));
+	const { jwt } = useJwt();
 
-	useEffect(() => {
-		setJwt(localStorage.getItem("token"));
-		console.log("UseEffect");
-	}, [jwt]);
-
-	return jwt ? children : <Navigate to={"/signin"} />;
+	return isValidJWT(jwt as string) ? <Navigate to={"/signin"} /> : children;
 };

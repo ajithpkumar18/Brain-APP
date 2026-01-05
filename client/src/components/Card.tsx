@@ -56,7 +56,7 @@ export const Card = (props: CardProps) => {
 						</a>
 					)}
 					{props.type === "twitter" && (
-						<blockquote className='twitter-tweet'>
+						<blockquote className='twitter-tweet w-64'>
 							<a href={props.link.replace("x", "twitter")}></a>
 						</blockquote>
 					)}

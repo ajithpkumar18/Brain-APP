@@ -6,6 +6,7 @@ export const useContent = () => {
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 	const navigate = useNavigate();
 	const [contents, setContents] = useState([]);
+	const [loading, isLoading] = useState(true);
 	function refresh() {
 		try {
 			axios
@@ -24,6 +25,7 @@ export const useContent = () => {
 
 	useEffect(() => {
 		refresh();
+		isLoading(false);
 
 		let interval = setInterval(() => {
 			refresh();
@@ -32,5 +34,5 @@ export const useContent = () => {
 		return clearInterval(interval);
 	}, []);
 
-	return { contents, refresh };
+	return { contents, refresh, loading, isLoading };
 };
