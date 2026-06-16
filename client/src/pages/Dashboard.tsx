@@ -23,8 +23,8 @@ function Dashboard() {
 			filter === "all"
 				? contents
 				: contents?.filter(
-						(content: { type: contents }) => content.type == filter
-				  );
+						(content: { type: contents }) => content.type == filter,
+					);
 
 		return filtered?.length > 0 ? filtered : contents;
 	}, [filter, contents]);
@@ -32,12 +32,10 @@ function Dashboard() {
 	async function handleShare(val: boolean) {
 		let response = await axios.post(
 			`${BACKEND_URL}/api/v1/brain/share`,
-			{ share: val },
 			{
-				headers: {
-					authorization: localStorage.getItem("token"),
-				},
-			}
+				share: val,
+			},
+			{ withCredentials: true },
 		);
 		if (!val) {
 			alert("Shareing stoppped");

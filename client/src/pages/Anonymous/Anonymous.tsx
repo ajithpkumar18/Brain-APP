@@ -3,11 +3,8 @@ import { isValidJWT } from "../../utils";
 import useJwt from "../../components/hooks/useJwt";
 
 export const Anonymous = () => {
-	const { jwt } = useJwt();
+	const { isLoggedIn } = useJwt();
 
-	return isValidJWT(jwt as string) ? (
-		<Outlet />
-	) : (
-		<Navigate to='/dashboard' replace />
-	);
+	if (isLoggedIn == null) return null;
+	return isLoggedIn ? <Navigate to='/dashboard' replace /> : <Outlet />;
 };

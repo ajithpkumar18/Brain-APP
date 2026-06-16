@@ -12,15 +12,19 @@ export const Signin = () => {
 	const signIN = async () => {
 		let username = usernameRef.current?.value;
 		let password = passwordRef.current?.value;
-		const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
-			username,
-			password,
-		});
+		const response = await axios.post(
+			`${BACKEND_URL}/api/v1/user/signin`,
+			{
+				username,
+				password,
+			},
+			{
+				withCredentials: true,
+			},
+		);
 
 		console.log(response);
 		if (response.status === 200) {
-			const jwt = response.data.token;
-			localStorage.setItem("token", jwt);
 			navigate("/dashboard");
 		}
 	};

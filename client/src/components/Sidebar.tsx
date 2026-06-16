@@ -5,12 +5,21 @@ import { Logo } from "./Icons/Logo";
 import { SidebarItem } from "./SidebarItem";
 import Youtube from "./Icons/Youtube";
 import { Logout } from "./Icons/Logout";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export const Sidebar = ({ setFilter }: { setFilter?: any }) => {
 	const Navigate = useNavigate();
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		if (localStorage.getItem("token") == null) Navigate("/signin");
+	const handleLogout = async () => {
+		await axios.post(
+			`${BACKEND_URL}/api/v1/user/logout`,
+			{},
+			{
+				withCredentials: true,
+			},
+		);
+
+		Navigate("/signin");
 	};
 
 	return (

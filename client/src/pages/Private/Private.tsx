@@ -1,10 +1,14 @@
 import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
-import { isValidJWT } from "../../utils";
 import useJwt from "../../components/hooks/useJwt";
 
 export const Private = ({ children }: { children: ReactElement }) => {
-	const { jwt } = useJwt();
+	const { isLoggedIn } = useJwt();
+	console.log("isLoggedIn", isLoggedIn);
+	if (isLoggedIn == null) {
+		console.log("null");
+		return null;
+	}
 
-	return isValidJWT(jwt as string) ? <Navigate to={"/signin"} /> : children;
+	return isLoggedIn ? children : <Navigate to={"/signin"} />;
 };

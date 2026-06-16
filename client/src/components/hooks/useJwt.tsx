@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const useJwt = () => {
-	const [jwt, setJwt] = useState(localStorage.getItem("token"));
+	const [isLoggedIn, setIsLoggenIn] = useState<boolean | null>(null);
 
 	useEffect(() => {
-		setJwt(localStorage.getItem("token"));
-	}, [jwt]);
-	return { jwt };
+		axios
+			.get(`${BACKEND_URL}/api/v1/user/me`, {
+				withCredentials: true,
+			})
+			.then(() => setIsLoggenIn(true))
+			.catch(() => setIsLoggenIn(false));
+	}, []);
+	return { isLoggedIn };
 };
 
 export default useJwt;

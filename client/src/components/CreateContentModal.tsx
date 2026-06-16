@@ -32,10 +32,8 @@ export const CreateContentModal = ({ open, onClose }: ModalProps) => {
 					type,
 				},
 				{
-					headers: {
-						authorization: localStorage.getItem("token"),
-					},
-				}
+					withCredentials: true,
+				},
 			);
 			onClose();
 		} else {
